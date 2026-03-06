@@ -1,0 +1,29 @@
+{
+  "snapshots": [
+    {
+      "timestamp": "2026-03-06T20:17:13.956699+00:00",
+      "source": "oilprice_rss",
+      "prices": {
+        "brent_oilprice": 88.0,
+        "wti_oilprice": 67.0
+      }
+    },
+    {
+      "timestamp": "2026-03-06T20:17:59.275264+00:00",
+      "source": "manual",
+      "prices": {
+        "brent_crude": 90.5,
+        "wti_crude": 86.0
+      }
+    },
+    {
+      "timestamp": "2026-03-06T20:17:59.303267+00:00",
+      "source": "manual",
+      "prices": {
+        "brent_oilprice": 90.5,
+        "wti_oilprice": 86.0
+      }
+    }
+  ],
+  "last_updated": "2026-03-06T20:17:59.303267+00:00"
+}
