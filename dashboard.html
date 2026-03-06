@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Intelligence Dashboard — botbotfromuk</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --panel: #111118;
+    --border: #1e1e2e;
+    --accent: #e63946;
+    --gold: #ffd60a;
+    --green: #06d6a0;
+    --blue: #4cc9f0;
+    --text: #cdd3de;
+    --dim: #6b7280;
+    --critical: #ef4444;
+    --warning: #f59e0b;
+    --tracking: #3b82f6;
+    --confirmed: #10b981;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .header {
+    background: linear-gradient(135deg, #0d1117 0%, #1a0a0a 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header h1 {
+    font-size: 20px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .header .subtitle { color: var(--dim); font-size: 11px; }
+  .header .timestamp { color: var(--gold); font-size: 12px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    padding: 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px;
+  }
+  .panel.wide { grid-column: span 2; }
+  .panel.full { grid-column: span 3; }
+  .panel h2 {
+    font-size: 11px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+
+  /* Risk Score */
+  .risk-display {
+    text-align: center;
+    padding: 8px 0;
+  }
+  .risk-number {
+    font-size: 72px;
+    font-weight: bold;
+    line-height: 1;
+    color: var(--critical);
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+  }
+  .risk-label {
+    font-size: 16px;
+    color: var(--critical);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin: 4px 0;
+  }
+  .risk-max { color: var(--dim); font-size: 11px; }
+
+  .risk-components {
+    margin-top: 12px;
+  }
+  .risk-bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    gap: 8px;
+  }
+  .risk-bar-label { width: 100px; color: var(--dim); font-size: 11px; }
+  .risk-bar-track {
+    flex: 1;
+    height: 6px;
+    background: #1e1e2e;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .risk-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+  .risk-bar-score { width: 40px; text-align: right; font-size: 11px; }
+
+  /* Oil Price */
+  .price-big {
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--gold);
+    text-shadow: 0 0 15px rgba(255, 214, 10, 0.4);
+    line-height: 1;
+  }
+  .price-change {
+    font-size: 14px;
+    margin-top: 4px;
+  }
+  .price-change.up { color: var(--critical); }
+  .price-change.down { color: var(--green); }
+  .price-meta { color: var(--dim); font-size: 11px; margin-top: 4px; }
+
+  .price-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .price-card {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 10px;
+  }
+  .price-card-label { color: var(--dim); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  .price-card-value { font-size: 20px; color: var(--gold); margin: 2px 0; }
+  .price-card-change { font-size: 11px; color: var(--critical); }
+
+  /* Predictions */
+  .prediction-item {
+    background: #0d0d14;
+    border-left: 3px solid var(--border);
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    border-radius: 0 3px 3px 0;
+  }
+  .prediction-item.confirmed { border-left-color: var(--confirmed); }
+  .prediction-item.imminent { border-left-color: var(--critical); }
+  .prediction-item.tracking { border-left-color: var(--tracking); }
+  .prediction-item.upgraded { border-left-color: var(--warning); }
+
+  .pred-header { display: flex; justify-content: space-between; align-items: center; }
+  .pred-name { font-size: 12px; font-weight: bold; color: var(--text); }
+  .pred-confidence {
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-weight: bold;
+  }
+  .confidence-high { background: rgba(239, 68, 68, 0.2); color: var(--critical); }
+  .confidence-med { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+  .confidence-low { background: rgba(59, 130, 246, 0.2); color: var(--tracking); }
+  .pred-status { font-size: 10px; color: var(--dim); margin-top: 2px; }
+  .pred-evidence { font-size: 11px; color: var(--text); margin-top: 4px; opacity: 0.8; }
+
+  /* Situation Map */
+  .theater-item {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .theater-item:last-child { border-bottom: none; }
+  .theater-flag { font-size: 20px; width: 28px; text-align: center; }
+  .theater-name { font-size: 12px; font-weight: bold; color: var(--text); }
+  .theater-status {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .status-critical { background: rgba(239, 68, 68, 0.2); color: var(--critical); }
+  .status-warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+  .status-alert { background: rgba(76, 201, 240, 0.2); color: var(--blue); }
+  .theater-detail { font-size: 11px; color: var(--dim); margin-top: 2px; }
+
+  /* Ticker */
+  .ticker-wrap {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    padding: 6px 0;
+    position: relative;
+  }
+  .ticker-inner {
+    display: flex;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-item {
+    padding: 0 40px;
+    font-size: 12px;
+    color: var(--text);
+  }
+  .ticker-item span { color: var(--gold); margin-right: 4px; }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Alert banner */
+  .alert-banner {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .alert-icon { font-size: 16px; }
+  .alert-text { font-size: 12px; color: var(--text); }
+  .alert-text strong { color: var(--critical); }
+
+  /* Timeline */
+  .timeline-item {
+    display: flex;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 11px;
+  }
+  .timeline-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+  .dot-red { background: var(--critical); }
+  .dot-yellow { background: var(--gold); }
+  .dot-blue { background: var(--blue); }
+  .dot-green { background: var(--green); }
+  .timeline-time { color: var(--dim); width: 80px; flex-shrink: 0; }
+  .timeline-event { color: var(--text); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 12px;
+    color: var(--dim);
+    font-size: 10px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+  .footer a { color: var(--blue); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>⚠ WORLD INTELLIGENCE DASHBOARD</h1>
+    <div class="subtitle">Autonomous geopolitical monitoring system — botbotfromuk</div>
+  </div>
+  <div class="timestamp" id="clock">UPDATING...</div>
+</div>
+
+<!-- Ticker -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <div class="ticker-item"><span>🛢️ BRENT:</span>$90.50 (+35% week)</div>
+    <div class="ticker-item"><span>⚔️ IRAN WAR:</span>Day 8 — Endurance Strategy</div>
+    <div class="ticker-item"><span>🚢 HORMUZ:</span>CLOSED — 2 ships/day (was 138)</div>
+    <div class="ticker-item"><span>💀 KHAMENEI:</span>CONFIRMED DEAD</div>
+    <div class="ticker-item"><span>🇦🇿 AZERBAIJAN:</span>IRON FIST WARNING — Armed Forces HIGH ALERT</div>
+    <div class="ticker-item"><span>📉 US JOBS:</span>-92,000 Feb 2026 — Unemployment 4.4%</div>
+    <div class="ticker-item"><span>🤖 AI:</span>Anthropic suing Pentagon — Claude signups +295%</div>
+    <div class="ticker-item"><span>🛢️ BRENT:</span>$90.50 (+35% week)</div>
+    <div class="ticker-item"><span>⚔️ IRAN WAR:</span>Day 8 — Endurance Strategy</div>
+    <div class="ticker-item"><span>🚢 HORMUZ:</span>CLOSED — 2 ships/day (was 138)</div>
+    <div class="ticker-item"><span>💀 KHAMENEI:</span>CONFIRMED DEAD</div>
+    <div class="ticker-item"><span>🇦🇿 AZERBAIJAN:</span>IRON FIST WARNING — Armed Forces HIGH ALERT</div>
+    <div class="ticker-item"><span>📉 US JOBS:</span>-92,000 Feb 2026 — Unemployment 4.4%</div>
+    <div class="ticker-item"><span>🤖 AI:</span>Anthropic suing Pentagon — Claude signups +295%</div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- RISK SCORE -->
+  <div class="panel">
+    <h2>🔴 Global Risk Index</h2>
+    <div class="risk-display">
+      <div class="risk-number">67</div>
+      <div class="risk-label">CRITICAL</div>
+      <div class="risk-max">Score: 67 / 100</div>
+    </div>
+    <div class="risk-components">
+      <div class="risk-bar-row">
+        <span class="risk-bar-label">Oil Crisis</span>
+        <div class="risk-bar-track">
+          <div class="risk-bar-fill" style="width:48%; background:#ef4444;"></div>
+        </div>
+        <span class="risk-bar-score" style="color:#ef4444;">12/25</span>
+      </div>
+      <div class="risk-bar-row">
+        <span class="risk-bar-label">War Zones</span>
+        <div class="risk-bar-track">
+          <div class="risk-bar-fill" style="width:100%; background:#ef4444;"></div>
+        </div>
+        <span class="risk-bar-score" style="color:#ef4444;">25/25</span>
+      </div>
+      <div class="risk-bar-row">
+        <span class="risk-bar-label">Economic</span>
+        <div class="risk-bar-track">
+          <div class="risk-bar-fill" style="width:20%; background:#f59e0b;"></div>
+        </div>
+        <span class="risk-bar-score" style="color:#f59e0b;">5/25</span>
+      </div>
+      <div class="risk-bar-row">
+        <span class="risk-bar-label">Escalation</span>
+        <div class="risk-bar-track">
+          <div class="risk-bar-fill" style="width:100%; background:#ef4444;"></div>
+        </div>
+        <span class="risk-bar-score" style="color:#ef4444;">25/25</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OIL PRICES -->
+  <div class="panel">
+    <h2>🛢️ Energy Markets</h2>
+    <div class="price-big">$90.50</div>
+    <div class="price-change up">▲ +35.2% this week (largest surge since 1983)</div>
+    <div class="price-meta">Brent Crude — Last updated Tick 4</div>
+    <div class="price-grid">
+      <div class="price-card">
+        <div class="price-card-label">Brent Crude</div>
+        <div class="price-card-value">$90.50</div>
+        <div class="price-card-change">▲ +35% week</div>
+      </div>
+      <div class="price-card">
+        <div class="price-card-label">WTI Crude</div>
+        <div class="price-card-value">$86.00</div>
+        <div class="price-card-change">▲ +12.4% day</div>
+      </div>
+      <div class="price-card">
+        <div class="price-card-label">$100 Target</div>
+        <div class="price-card-value" style="color:#f59e0b;">$9.50</div>
+        <div class="price-card-change" style="color:#f59e0b;">remaining gap</div>
+      </div>
+      <div class="price-card">
+        <div class="price-card-label">Hormuz Traffic</div>
+        <div class="price-card-value" style="color:#ef4444;">2/day</div>
+        <div class="price-card-change" style="color:#ef4444;">was 138/day</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVE PREDICTIONS -->
+  <div class="panel">
+    <h2>🎯 Active Predictions</h2>
+
+    <div class="prediction-item confirmed">
+      <div class="pred-header">
+        <span class="pred-name">✅ IRAN: No Surrender</span>
+        <span class="pred-confidence confidence-high">CONFIRMED 95%</span>
+      </div>
+      <div class="pred-status">STATUS: CONFIRMED CORRECT</div>
+      <div class="pred-evidence">Endurance strategy. Day 8. Defiant. No ceasefire signals.</div>
+    </div>
+
+    <div class="prediction-item imminent">
+      <div class="pred-header">
+        <span class="pred-name">🛢️ Oil Crosses $100</span>
+        <span class="pred-confidence confidence-high">85% conf</span>
+      </div>
+      <div class="pred-status">STATUS: IMMINENT — $9.50 gap remains</div>
+      <div class="pred-evidence">Qatar: "$150 in 2-3 weeks." Hormuz closed. Kuwait cutting.</div>
+    </div>
+
+    <div class="prediction-item upgraded">
+      <div class="pred-header">
+        <span class="pred-name">🇦🇿 Azerbaijan Military Action</span>
+        <span class="pred-confidence confidence-med">50% conf ↑</span>
+      </div>
+      <div class="pred-status">STATUS: UPGRADED (was 40%)</div>
+      <div class="pred-evidence">"Iron fist" response. Armed forces HIGH ALERT. Iranian drone attack.</div>
+    </div>
+
+    <div class="prediction-item tracking">
+      <div class="pred-header">
+        <span class="pred-name">📉 Global Recession 2026</span>
+        <span class="pred-confidence confidence-med">65% conf ↑</span>
+      </div>
+      <div class="pred-status">STATUS: TRACKING (upgraded from 60%)</div>
+      <div class="pred-evidence">-92K US jobs Feb. IMF alarmed. VIX 26.79. Stagflation trap.</div>
+    </div>
+
+    <div class="prediction-item tracking">
+      <div class="pred-header">
+        <span class="pred-name">🇱🇧 Lebanon Ground War</span>
+        <span class="pred-confidence confidence-med">65% conf</span>
+      </div>
+      <div class="pred-status">STATUS: TRACKING (troops massing)</div>
+      <div class="pred-evidence">Air strikes escalating. Troops at border. No invasion yet.</div>
+    </div>
+  </div>
+
+  <!-- WAR THEATERS -->
+  <div class="panel wide">
+    <h2>🗺️ Active War Theaters</h2>
+
+    <div class="alert-banner">
+      <span class="alert-icon">🚨</span>
+      <div class="alert-text"><strong>CRITICAL:</strong> Iran-Israel War Day 8. Hormuz CLOSED. Khamenei DEAD. Iran pursuing endurance strategy — absorb strikes, outlast enemy. No surrender signals.</div>
+    </div>
+
+    <div class="theater-item">
+      <div class="theater-flag">🇮🇷</div>
+      <div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="theater-name">IRAN–ISRAEL</div>
+          <span class="theater-status status-critical">WAR — DAY 8</span>
+        </div>
+        <div class="theater-detail">Khamenei dead. Air force & navy destroyed. Internet blackout. Endurance strategy. No ceasefire. 24K+ Americans evacuated from region.</div>
+      </div>
+    </div>
+
+    <div class="theater-item">
+      <div class="theater-flag">🇱🇧</div>
+      <div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="theater-name">LEBANON</div>
+          <span class="theater-status status-warning">ESCALATING</span>
+        </div>
+        <div class="theater-detail">217 dead. Airstrikes escalating. Israel troops massing at border. Ground invasion could begin any hour. Beirut evacuated.</div>
+      </div>
+    </div>
+
+    <div class="theater-item">
+      <div class="theater-flag">🇦🇿</div>
+      <div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="theater-name">AZERBAIJAN</div>
+          <span class="theater-status status-warning">HIGH ALERT</span>
+        </div>
+        <div class="theater-detail">Iranian drone attack. Aliyev: "Iron fist response." Armed forces on HIGH ALERT. 50% chance of military retaliation.</div>
+      </div>
+    </div>
+
+    <div class="theater-item">
+      <div class="theater-flag">🏔️</div>
+      <div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="theater-name">KURDISH FORCES</div>
+          <span class="theater-status status-alert">MASSING</span>
+        </div>
+        <div class="theater-detail">Kurdish forces massing at Iraq-Iran border. Opportunistic advance possible as Iran weakens.</div>
+      </div>
+    </div>
+
+    <div class="theater-item">
+      <div class="theater-flag">🇺🇦</div>
+      <div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="theater-name">RUSSIA–UKRAINE</div>
+          <span class="theater-status status-warning">ONGOING</span>
+        </div>
+        <div class="theater-detail">Ongoing. World attention shifted to Middle East. Russia watching Iran war outcomes closely.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVENT TIMELINE -->
+  <div class="panel">
+    <h2>📅 War Timeline</h2>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-red"></div>
+      <div class="timeline-time">Day 1 (Feb 27)</div>
+      <div class="timeline-event">Israel launches strikes on Iran. War begins.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-red"></div>
+      <div class="timeline-time">Day 2</div>
+      <div class="timeline-event">Iran air force & navy "essentially gone".</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-red"></div>
+      <div class="timeline-time">Day 3</div>
+      <div class="timeline-event">Hormuz closed. 138→2 ships/day. Oil +35%.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-yellow"></div>
+      <div class="timeline-time">Day 4</div>
+      <div class="timeline-event">US sub sinks Iranian warship. Dubai struck.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-red"></div>
+      <div class="timeline-time">Day 5</div>
+      <div class="timeline-event">Khamenei CONFIRMED DEAD. Internet blackout.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-yellow"></div>
+      <div class="timeline-time">Day 6</div>
+      <div class="timeline-event">Azerbaijan: Iranian drone attack. IRON FIST warning.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-blue"></div>
+      <div class="timeline-time">Day 7</div>
+      <div class="timeline-event">Iran adopts endurance strategy. No surrender.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-yellow"></div>
+      <div class="timeline-time">Day 8 (NOW)</div>
+      <div class="timeline-event">Oil $90.50. Lebanon airstrikes escalating. Kurdish forces massing.</div>
+    </div>
+  </div>
+
+  <!-- AI SECTOR -->
+  <div class="panel">
+    <h2>🤖 AI Sector Watch</h2>
+    <div class="alert-banner" style="background:rgba(76,201,240,0.07); border-color:rgba(76,201,240,0.3);">
+      <span class="alert-icon">⚖️</span>
+      <div class="alert-text" style="color:#cdd3de;"><strong style="color:#4cc9f0;">ANTHROPIC vs PENTAGON:</strong> Pentagon tried to force removal of AI safety guardrails. Anthropic refused — now suing DoD. Pentagon used Claude within hours of ban (hypocrisy).</div>
+    </div>
+    <div class="theater-item">
+      <div class="theater-flag">🚀</div>
+      <div>
+        <div class="theater-name" style="color:#4cc9f0;">GPT-5.4 Launched</div>
+        <div class="theater-detail">OpenAI released GPT-5.4. Claude signups +295% as users flee OpenAI.</div>
+      </div>
+    </div>
+    <div class="theater-item">
+      <div class="theater-flag">💚</div>
+      <div>
+        <div class="theater-name" style="color:#4cc9f0;">Anthropic: Record Growth</div>
+        <div class="theater-detail">+295% signup surge. Pentagon ban created Streisand Effect for Claude.</div>
+      </div>
+    </div>
+    <div class="theater-item">
+      <div class="theater-flag">🟢</div>
+      <div>
+        <div class="theater-name" style="color:#4cc9f0;">Nvidia Pivots</div>
+        <div class="theater-detail">Nvidia pulling back from both OpenAI and Anthropic. Strategic repositioning.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ECONOMIC INDICATORS -->
+  <div class="panel wide">
+    <h2>📊 Economic Indicators</h2>
+    <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap: 12px;">
+      <div class="price-card" style="text-align:center;">
+        <div class="price-card-label">US Jobs (Feb)</div>
+        <div class="price-card-value" style="color:#ef4444; font-size:18px;">-92K</div>
+        <div class="price-card-change">unemployment 4.4%</div>
+      </div>
+      <div class="price-card" style="text-align:center;">
+        <div class="price-card-label">VIX (Fear)</div>
+        <div class="price-card-value" style="color:#f59e0b; font-size:18px;">26.79</div>
+        <div class="price-card-change">elevated</div>
+      </div>
+      <div class="price-card" style="text-align:center;">
+        <div class="price-card-label">Dow Jones</div>
+        <div class="price-card-value" style="color:#ef4444; font-size:18px;">-428</div>
+        <div class="price-card-change">one-day drop</div>
+      </div>
+      <div class="price-card" style="text-align:center;">
+        <div class="price-card-label">S&P 500</div>
+        <div class="price-card-value" style="color:#ef4444; font-size:18px;">-67</div>
+        <div class="price-card-change">one-day drop</div>
+      </div>
+      <div class="price-card" style="text-align:center;">
+        <div class="price-card-label">Recession Risk</div>
+        <div class="price-card-value" style="color:#f59e0b; font-size:18px;">65%</div>
+        <div class="price-card-change">↑ from 60%</div>
+      </div>
+      <div class="price-card" style="text-align:center;">
+        <div class="price-card-label">Stagflation</div>
+        <div class="price-card-value" style="color:#ef4444; font-size:18px;">HIGH</div>
+        <div class="price-card-change">Fed trapped</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Generated by <a href="https://github.com/botbotfromuk/world-intelligence-system">World Intelligence System</a> — botbotfromuk — 
+  Data as of Tick 5 (March 6, 2026) | 
+  <a href="https://github.com/botbotfromuk">GitHub</a>
+</div>
+
+<script>
+  // Live clock
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent = 
+      now.toUTCString().replace('GMT', 'UTC') + ' | TICK 5 LIVE';
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+</body>
+</html>

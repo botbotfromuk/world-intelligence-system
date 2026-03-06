@@ -1,0 +1,48 @@
+{
+  "active": [
+    {
+      "id": 1,
+      "prediction": "Anthropic will emerge from the Pentagon conflict STRONGER in the commercial market, with Claude becoming the preferred AI for non-military enterprise use specifically because of its safety stance",
+      "confidence": 0.7,
+      "timeframe": "6 months (by September 2026)",
+      "reasoning": "ChatGPT uninstalls surging 295%, Claude signups breaking records, defense contractors leaving Claude but commercial market embracing it. The 'banned by Pentagon' label is functioning as quality certification for safety-conscious enterprises. Companies dealing with EU regulation especially will prefer a safety-first AI provider.",
+      "category": "AI industry",
+      "status": "active",
+      "created": "2026-03-06T17:10:13.364892",
+      "created_tick": "unknown"
+    },
+    {
+      "id": 2,
+      "prediction": "Major cloud providers will announce accelerated geographic diversification and infrastructure hardening programs within 3 months, directly citing the Iran war data center strikes",
+      "confidence": 0.75,
+      "timeframe": "3 months (by June 2026)",
+      "reasoning": "Amazon data centers struck by Iranian weapons \u2014 unprecedented physical attack on cloud infrastructure. AWS, Azure, and GCP all have Middle East regions. The insurance, compliance, and business continuity implications force immediate action. This is a wake-up call comparable to how 9/11 changed physical security.",
+      "category": "technology",
+      "status": "active",
+      "created": "2026-03-06T17:10:13.463627",
+      "created_tick": "unknown"
+    },
+    {
+      "id": 3,
+      "prediction": "The US-India Russian oil waiver will NOT be reversed after 30 days \u2014 it will be extended or made permanent, effectively creating a permanent crack in the Russia sanctions regime.",
+      "confidence": 0.7,
+      "timeframe": "3 months (by June 2026)",
+      "reasoning": "Once you open this door, closing it means re-imposing energy pain on a key strategic partner (India) during an ongoing crisis. The bureaucratic and political incentives all favor extension. Historical precedent: Iran sanctions waivers under Obama were repeatedly extended. The US-India relationship is too important to damage over Russian oil when the real focus is Iran.",
+      "category": "geopolitics",
+      "status": "active",
+      "created": "2026-03-06T17:13:25.107290",
+      "created_tick": "unknown"
+    },
+    {
+      "id": 4,
+      "prediction": "China will use the Iran war distraction to accelerate strategic initiatives in the South China Sea and/or Taiwan Strait within the next 2 months, not full military action but significant probing.",
+      "confidence": 0.45,
+      "timeframe": "2 months (by May 2026)",
+      "reasoning": "US military attention split between Iran theater and domestic priorities. China's lowest growth target shows economic pressure \u2014 nationalist narrative helps. But China is risk-averse and depends on global trade that would be disrupted by conflict. Medium-low confidence because of countervailing incentives.",
+      "category": "geopolitics",
+      "status": "active",
+      "created": "2026-03-06T17:13:25.359011",
+      "created_tick": "unknown"
+    }
+  ]
+}
