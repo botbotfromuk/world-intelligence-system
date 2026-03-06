@@ -1,0 +1,61 @@
+{
+  "tick": 8,
+  "timestamp": "2026-03-06T20:44:00Z",
+  "risk_score": 89,
+  "risk_delta": "+2",
+  "risk_level": "EXTREME",
+  "oil_prices": {
+    "brent": 92.55,
+    "wti": 91.10,
+    "murban": 102.20,
+    "nat_gas": 3.187,
+    "brent_to_100_gap": 7.45,
+    "brent_crossed_100": false,
+    "murban_crossed_100": true,
+    "weekly_change_pct": 21.0
+  },
+  "predictions": {
+    "IRAN_NO_SURRENDER": {"status": "CONFIRMED", "confidence": 99},
+    "LEBANON_GROUND_WAR": {"status": "CONFIRMED", "confidence": 99},
+    "BEIRUT_MAJOR_OFFENSIVE": {"status": "ACTIVE", "confidence": 75, "new_tick": 8},
+    "OIL_100_BRENT": {"status": "TRACKING", "confidence": 92},
+    "OIL_150": {"status": "TRACKING", "confidence": 50},
+    "SAUDI_MILITARY_INVOLVEMENT": {"status": "TRACKING", "confidence": 45},
+    "RUSSIA_PROXY_WAR": {"status": "TRACKING", "confidence": 55},
+    "AZERBAIJAN_RETALIATION": {"status": "TRACKING", "confidence": 65},
+    "GLOBAL_RECESSION": {"status": "TRACKING", "confidence": 78},
+    "AI_ANTHROPIC_COMMERCIAL": {"status": "TRIGGERED", "confidence": 75},
+    "CEASEFIRE_Q1_2026": {"status": "TRACKING", "confidence": 2}
+  },
+  "scenarios": {
+    "A_negotiated_exit": 0.01,
+    "B_controlled_escalation": 0.40,
+    "C_saudi_global_crisis": 0.50,
+    "D_wmd_threshold": 0.09
+  },
+  "expected_brent": 125,
+  "key_developments": [
+    "Israel orders mass evacuation of Beirut southern suburbs - Beirut offensive IMMINENT",
+    "Anthropic designated Pentagon supply chain risk - suing DoD",
+    "Trump orders all agencies stop using Anthropic - OpenAI steps in",
+    "Brent $92.55 - gap $7.45 from $100",
+    "Lebanon: 120+ killed, 700 wounded, 90,000 displaced",
+    "Hezbollah: won't surrender to utmost sacrifice",
+    "Macron calling for ceasefire - Lebanon de-escalation attempt",
+    "Europe gas +50% weekly - biggest since 2023"
+  ],
+  "theaters": {
+    "iran": "RED - daily strikes",
+    "lebanon": "RED - Beirut evacuation ordered, ground offensive imminent",
+    "saudi_arabia": "RED - US Embassy struck, drones ongoing",
+    "azerbaijan": "ORANGE - HIGH ALERT, retaliation vowed",
+    "iraq_kurdistan": "YELLOW - forces massing",
+    "bahrain": "YELLOW - refinery struck",
+    "qatar": "YELLOW - airspace closed, LNG halted"
+  },
+  "ai_sector": {
+    "anthropic": "CRISIS - Pentagon supply chain risk, suing DoD",
+    "openai": "WINNER - new DoD contract",
+    "microsoft": "NEUTRAL - keeping Anthropic for non-DoD"
+  }
+}

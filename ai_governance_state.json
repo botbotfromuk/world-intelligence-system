@@ -1,0 +1,81 @@
+{
+  "timestamp": "2026-03-06T20:47:48.423443",
+  "companies": {
+    "Anthropic": {
+      "name": "Anthropic",
+      "government_relationship": "HOSTILE",
+      "dod_access": false,
+      "key_event": "Pentagon supply chain risk designation March 6 2026 - SUING DOD",
+      "commercial_impact": "Banned from DoD contractors; 1M+ daily Claude signups unaffected",
+      "market_position": "Most downloaded AI app globally; major revenue from commercial/enterprise"
+    },
+    "OpenAI": {
+      "name": "OpenAI",
+      "government_relationship": "ALLY",
+      "dod_access": true,
+      "key_event": "New DoD contract signed after Anthropic fallout; Altman praised Trump",
+      "commercial_impact": "Major government contract windfall; benefiting from Anthropic exclusion",
+      "market_position": "Stepping into Anthropic's government gap; dominant consumer"
+    },
+    "Microsoft": {
+      "name": "Microsoft",
+      "government_relationship": "ALLY",
+      "dod_access": true,
+      "key_event": "Keeping Anthropic for non-DoD work; fully compliant with Pentagon on DoD",
+      "commercial_impact": "Can separate Claude usage: civilian OK, DoD excluded",
+      "market_position": "Straddling both sides pragmatically"
+    },
+    "Google": {
+      "name": "Google",
+      "government_relationship": "NEUTRAL",
+      "dod_access": true,
+      "key_event": "Not in current story; watching from sidelines",
+      "commercial_impact": "No immediate impact; may benefit from Anthropic weakness",
+      "market_position": "Strong government presence via Google Cloud"
+    }
+  },
+  "events": [
+    {
+      "date": "2026-03-04",
+      "actor": "US DoD",
+      "action": "Threatened Anthropic with deadline on AI safeguards",
+      "impact": "Negotiations started",
+      "severity": "HIGH",
+      "source": "BBC"
+    },
+    {
+      "date": "2026-03-05",
+      "actor": "Trump",
+      "action": "Truth Social: ordered all federal agencies to stop using Anthropic",
+      "impact": "Stock/commercial concern; negotiations break down",
+      "severity": "CRITICAL",
+      "source": "BBC/Reuters"
+    },
+    {
+      "date": "2026-03-06",
+      "actor": "Pentagon",
+      "action": "Official supply chain risk designation - effective immediately",
+      "impact": "Anthropic banned from all DoD contractor use",
+      "severity": "CRITICAL",
+      "source": "BBC"
+    },
+    {
+      "date": "2026-03-06",
+      "actor": "Anthropic/Amodei",
+      "action": "Announced lawsuit challenging supply chain risk designation",
+      "impact": "Legal battle begins; 'not legally sound'",
+      "severity": "HIGH",
+      "source": "BBC"
+    },
+    {
+      "date": "2026-03-06",
+      "actor": "OpenAI/Altman",
+      "action": "New DoD contract signed; 'more guardrails than any previous'",
+      "impact": "OpenAI wins government market; Anthropic loses",
+      "severity": "HIGH",
+      "source": "BBC"
+    }
+  ],
+  "key_prediction": "OpenAI wins government, Anthropic wins commercial/global",
+  "risk_level": "HIGH"
+}
