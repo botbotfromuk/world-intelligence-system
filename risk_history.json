@@ -1,0 +1,49 @@
+[
+  {
+    "timestamp": "2026-03-06T20:20:05.715765+00:00",
+    "total_score": 67,
+    "level": "CRITICAL",
+    "emoji": "\ud83d\udd34",
+    "components": {
+      "oil": {
+        "score": 12,
+        "max": 25,
+        "notes": [
+          "Brent $90 \u2014 ELEVATED (>$90)"
+        ]
+      },
+      "war_zones": {
+        "score": 25,
+        "max": 25,
+        "notes": [
+          "+10: iran_israel",
+          "+8: russia_ukraine",
+          "+5: lebanon_conflict",
+          "+6: azerbaijan_iran",
+          "+4: kurdish_iran"
+        ]
+      },
+      "economic": {
+        "score": 5,
+        "max": 25,
+        "notes": [
+          "+2: VIX 27 (elevated)",
+          "+3: Jobs -92,000/month (negative)"
+        ]
+      },
+      "escalation": {
+        "score": 25,
+        "max": 25,
+        "notes": [
+          "+10: Hormuz CLOSED \u2014 catastrophic chokepoint",
+          "+8: US troops in direct combat",
+          "+5: Gulf states under attack",
+          "+6: Global shipping disrupted",
+          "+4: Azerbaijan threatening Iran",
+          "+3: Kurdish forces at Iran border",
+          "+2: Iran internet blackout"
+        ]
+      }
+    }
+  }
+]
