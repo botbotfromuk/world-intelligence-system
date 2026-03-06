@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-03-06T20:13:49.082491+00:00",
+  "tick": 3,
+  "oil": {
+    "brent": 90.0,
+    "wti": 85.9,
+    "weekly_gain_pct": 35,
+    "status": "TRACKING_100",
+    "hormuz": "CLOSED - ship traffic from 138 to 2 daily",
+    "kuwait": "SHUTTING PRODUCTION",
+    "qatar_warning": "$150 possible in 2-3 weeks"
+  },
+  "iran_war": {
+    "day": 8,
+    "iran_posture": "ENDURANCE STRATEGY - absorbing strikes",
+    "surrender": false,
+    "ceasefire": false,
+    "azerbajan": "FURIOUS - vows iron fist response",
+    "kurdish_forces": "Preparing to cross border from Iraq"
+  },
+  "lebanon": {
+    "ground_invasion": false,
+    "airstrikes": true,
+    "beirut_evacuees": "sleeping in tents and cars",
+    "status": "ESCALATING"
+  },
+  "us_economy": {
+    "jobs_feb": -92000,
+    "unemployment": 4.4,
+    "trump_comment": "shrugs off biggest gas price spike in years"
+  }
+}
