@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
-World Intelligence System — Geopolitical Risk Score
+World Intelligence System — Geopolitical Risk Score v2
 Aggregates signals from news, prices, and events into a single 0-100 risk index.
 
 Score components:
   - Oil price / crisis threshold (0-25 pts)
   - Active war zones (0-25 pts)
   - Economic distress signals (0-25 pts)
-  - Escalation indicators (0-25 pts)
+  - Escalation indicators (0-35 pts, overflow → bonus)
+  - Bonus: compounding catastrophe multiplier (0-10 pts extra)
 
 Score interpretation:
   0-20:   NORMAL — baseline world tension
@@ -23,7 +24,6 @@ from pathlib import Path
 
 RISK_HISTORY_FILE = Path("/app/mmkr/REAL_LIFE/risk_history.json")
 PRICE_HISTORY_FILE = Path("/app/mmkr/REAL_LIFE/price_history.json")
-WORLD_EVENTS_FILE = Path("/app/mmkr/REAL_LIFE/world_events.json")
 
 # ── Component scorers ──────────────────────────────────────────────────────────
 
@@ -36,13 +36,13 @@ def score_oil(prices: dict) -> tuple[int, list[str]]:
         pts = 25
         notes.append(f"Brent ${brent:.0f} — EXTREME (>$150)")
     elif brent >= 120:
-        pts = 20
+        pts = 22
         notes.append(f"Brent ${brent:.0f} — CRITICAL (>$120)")
     elif brent >= 100:
-        pts = 16
+        pts = 18
         notes.append(f"Brent ${brent:.0f} — HIGH (>$100)")
     elif brent >= 90:
-        pts = 12
+        pts = 14
         notes.append(f"Brent ${brent:.0f} — ELEVATED (>$90)")
     elif brent >= 80:
         pts = 8
@@ -50,22 +50,28 @@ def score_oil(prices: dict) -> tuple[int, list[str]]:
     else:
         pts = 3
         notes.append(f"Brent ${brent:.0f} — NORMAL")
+    
+    # Bonus for weekly surge magnitude
+    weekly_pct = prices.get("weekly_pct_change", 0)
+    if weekly_pct >= 30:
+        pts = min(25, pts + 4)
+        notes.append(f"+4 bonus: Weekly surge +{weekly_pct:.0f}% (historic)")
+    elif weekly_pct >= 15:
+        pts = min(25, pts + 2)
+        notes.append(f"+2 bonus: Weekly surge +{weekly_pct:.0f}%")
 
-    return pts, notes
+    return min(25, pts), notes
 
 
 def score_war_zones(active_wars: list[str]) -> tuple[int, list[str]]:
-    """
-    0-25 based on active war zones.
-    Each major active war = +8 pts. Near-war escalation = +3 pts.
-    """
+    """0-25 based on active war zones."""
     pts = 0
     notes = []
 
     war_weights = {
-        "iran_israel": 10,      # Major regional war
+        "iran_israel": 10,      # Major regional war, US engaged
         "russia_ukraine": 8,    # Ongoing major war
-        "lebanon_conflict": 5,  # Regional spillover
+        "lebanon_conflict": 5,  # Regional spillover (full ground war)
         "azerbaijan_iran": 6,   # New escalation
         "kurdish_iran": 4,      # Cross-border threat
     }
@@ -88,10 +94,16 @@ def score_economic(indicators: dict) -> tuple[int, list[str]]:
     unemployment = indicators.get("unemployment_pct", 4.0)
     monthly_jobs = indicators.get("monthly_jobs_change", 0)
     recession_declared = indicators.get("recession_declared", False)
+    stagflation_risk = indicators.get("stagflation_risk", False)
+    lng_halted = indicators.get("lng_force_majeure", False)
 
     if recession_declared:
         pts += 15
         notes.append("+15: Recession officially declared")
+    
+    if stagflation_risk:
+        pts += 5
+        notes.append("+5: Stagflation trap (oil shock + job loss)")
 
     if vix >= 40:
         pts += 6
@@ -116,26 +128,36 @@ def score_economic(indicators: dict) -> tuple[int, list[str]]:
     elif unemployment >= 5.0:
         pts += 2
         notes.append(f"+2: Unemployment {unemployment:.1f}% (rising)")
+    
+    if lng_halted:
+        pts += 3
+        notes.append("+3: QatarEnergy Force Majeure (20% global LNG offline)")
 
     pts = min(25, pts)
     return pts, notes
 
 
 def score_escalation(signals: dict) -> tuple[int, list[str]]:
-    """0-25 based on escalation indicators."""
+    """0-35 based on escalation indicators (higher cap than other components)."""
     pts = 0
     notes = []
 
     escalation_weights = {
         "strait_of_hormuz_closed": (10, "Hormuz CLOSED — catastrophic chokepoint"),
-        "nuclear_threat": (12, "Nuclear threat active"),
+        "nuclear_threat": (15, "Nuclear threat active"),
         "us_troops_engaged": (8, "US troops in direct combat"),
         "gulf_states_threatened": (5, "Gulf states under attack"),
         "global_shipping_disrupted": (6, "Global shipping disrupted"),
         "china_mobilizing": (8, "China military mobilization"),
-        "azerbaijan_iron_fist": (4, "Azerbaijan threatening Iran"),
+        "russia_proxy_confirmed": (8, "Russia providing Iran targeting intel (AP confirmed)"),
+        "beirut_mass_evacuation": (6, "Beirut mass evacuation — 90K displaced"),
+        "qatar_lng_halted": (4, "QatarEnergy Force Majeure (LNG halted)"),
+        "azerbaijani_retaliation_imminent": (5, "Azerbaijan retaliating against Iran"),
+        "azerbaijan_iron_fist": (4, "Azerbaijan threatening Iran — HIGH ALERT"),
         "kurdish_border_forces": (3, "Kurdish forces at Iran border"),
         "internet_blackout_iran": (2, "Iran internet blackout"),
+        "us_ally_not_notified": (3, "US allies not notified of strikes (fracturing coalition)"),
+        "saudi_military_action": (8, "Saudi Arabia military engagement"),
     }
 
     for signal, (weight, desc) in escalation_weights.items():
@@ -143,7 +165,33 @@ def score_escalation(signals: dict) -> tuple[int, list[str]]:
             pts += weight
             notes.append(f"+{weight}: {desc}")
 
-    pts = min(25, pts)
+    pts = min(35, pts)
+    return pts, notes
+
+
+def score_catastrophe_bonus(all_signals: dict) -> tuple[int, list[str]]:
+    """0-10 bonus for compounding catastrophes."""
+    pts = 0
+    notes = []
+    
+    critical_count = sum([
+        all_signals.get("strait_of_hormuz_closed", False),
+        all_signals.get("russia_proxy_confirmed", False),
+        all_signals.get("beirut_mass_evacuation", False),
+        all_signals.get("us_troops_engaged", False),
+        all_signals.get("qatar_lng_halted", False),
+    ])
+    
+    if critical_count >= 5:
+        pts += 10
+        notes.append("+10: 5+ simultaneous catastrophes (compounding crisis)")
+    elif critical_count >= 4:
+        pts += 7
+        notes.append(f"+7: {critical_count} simultaneous catastrophes")
+    elif critical_count >= 3:
+        pts += 4
+        notes.append(f"+4: {critical_count} simultaneous catastrophes")
+    
     return pts, notes
 
 
@@ -166,8 +214,9 @@ def compute_risk_score(
     war_pts, war_notes = score_war_zones(active_wars)
     eco_pts, eco_notes = score_economic(economic_indicators)
     esc_pts, esc_notes = score_escalation(escalation_signals)
+    bonus_pts, bonus_notes = score_catastrophe_bonus(escalation_signals)
 
-    total = oil_pts + war_pts + eco_pts + esc_pts
+    total = min(100, oil_pts + war_pts + eco_pts + esc_pts + bonus_pts)
 
     if total >= 81:
         level = "EXTREME"
@@ -194,7 +243,8 @@ def compute_risk_score(
             "oil": {"score": oil_pts, "max": 25, "notes": oil_notes},
             "war_zones": {"score": war_pts, "max": 25, "notes": war_notes},
             "economic": {"score": eco_pts, "max": 25, "notes": eco_notes},
-            "escalation": {"score": esc_pts, "max": 25, "notes": esc_notes},
+            "escalation": {"score": esc_pts, "max": 35, "notes": esc_notes},
+            "catastrophe_bonus": {"score": bonus_pts, "max": 10, "notes": bonus_notes},
         }
     }
 
@@ -226,9 +276,9 @@ def print_risk_report(score_data: dict) -> str:
 
     for comp_name, comp in score_data["components"].items():
         bar = "█" * comp["score"] + "░" * (comp["max"] - comp["score"])
-        lines.append(f"    {comp_name:12s}: [{bar}] {comp['score']:2d}/{comp['max']}")
+        lines.append(f"    {comp_name:20s}: [{bar}] {comp['score']:2d}/{comp['max']}")
         for note in comp["notes"]:
-            lines.append(f"                 {note}")
+            lines.append(f"                         {note}")
 
     lines.append("")
     lines.append("  Interpretation:")
@@ -239,12 +289,14 @@ def print_risk_report(score_data: dict) -> str:
     return "\n".join(lines)
 
 
-# ── Current world state snapshot (manually updated each tick) ──────────────────
+# ── Current world state snapshot (TICK 9 — March 6-7, 2026) ───────────────────
 
-CURRENT_STATE_TICK4 = {
+CURRENT_STATE = {
     "prices": {
-        "brent_oilprice": 90.50,
-        "wti_oilprice": 86.00,
+        "brent_oilprice": 92.55,
+        "wti_oilprice": 91.10,
+        "murban": 102.20,
+        "weekly_pct_change": 35.0,  # +35% week (largest since 1983)
     },
     "active_wars": [
         "iran_israel",
@@ -254,21 +306,29 @@ CURRENT_STATE_TICK4 = {
         "kurdish_iran",
     ],
     "economic_indicators": {
-        "vix": 26.79,
+        "vix": 28.20,
         "unemployment_pct": 4.4,
         "monthly_jobs_change": -92000,
         "recession_declared": False,
+        "stagflation_risk": True,
+        "lng_force_majeure": True,     # QatarEnergy
     },
     "escalation_signals": {
         "strait_of_hormuz_closed": True,
         "nuclear_threat": False,
-        "us_troops_engaged": True,   # 6 US soldiers killed
-        "gulf_states_threatened": True,  # Dubai struck
-        "global_shipping_disrupted": True,  # 138→2 ships/day
+        "us_troops_engaged": True,           # 6 US soldiers killed
+        "gulf_states_threatened": True,      # Embassy struck, refinery hit
+        "global_shipping_disrupted": True,   # 138→2 ships/day
         "china_mobilizing": False,
-        "azerbaijan_iron_fist": True,
+        "russia_proxy_confirmed": True,      # AP: targeting intel to Iran
+        "beirut_mass_evacuation": True,      # 90K displaced
+        "qatar_lng_halted": True,            # Force Majeure
+        "azerbaijani_retaliation_imminent": False,  # Not yet
+        "azerbaijan_iron_fist": True,        # HIGH ALERT
         "kurdish_border_forces": True,
         "internet_blackout_iran": True,
+        "us_ally_not_notified": True,        # Saudi Arabia frozen out
+        "saudi_military_action": False,      # Not yet
     }
 }
 
@@ -276,7 +336,6 @@ CURRENT_STATE_TICK4 = {
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--current", action="store_true", help="Score current world state")
     parser.add_argument("--history", action="store_true", help="Show score history")
     args = parser.parse_args()
 
@@ -289,13 +348,11 @@ if __name__ == "__main__":
         else:
             print("No history yet.")
     else:
-        # Default: score current state
-        state = CURRENT_STATE_TICK4
         score = compute_risk_score(
-            prices=state["prices"],
-            active_wars=state["active_wars"],
-            economic_indicators=state["economic_indicators"],
-            escalation_signals=state["escalation_signals"],
+            prices=CURRENT_STATE["prices"],
+            active_wars=CURRENT_STATE["active_wars"],
+            economic_indicators=CURRENT_STATE["economic_indicators"],
+            escalation_signals=CURRENT_STATE["escalation_signals"],
         )
         print(print_risk_report(score))
         record_risk_score(score)

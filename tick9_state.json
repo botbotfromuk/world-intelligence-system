@@ -1,0 +1,69 @@
+{
+  "tick": 9,
+  "timestamp": "2026-03-06T21:00:00Z",
+  "risk_score": 100,
+  "risk_level": "EXTREME",
+  "risk_score_note": "Model ceiling reached — 5+ simultaneous catastrophes, all components maxed",
+  
+  "oil_prices": {
+    "brent": 92.55,
+    "wti": 91.10,
+    "murban": 102.20,
+    "weekly_change_pct": 35.0,
+    "brent_gap_to_100": 7.45,
+    "hormuz_ships_per_day": 2,
+    "hormuz_normal": 138,
+    "lng_shipping_rate_usd_day": 300000,
+    "lng_surge_pct": 650
+  },
+  
+  "predictions": {
+    "iran_no_surrender": {"status": "CONFIRMED", "confidence": 0.99},
+    "lebanon_ground_war": {"status": "CONFIRMED", "confidence": 0.99},
+    "oil_100_murban": {"status": "CONFIRMED", "confidence": 1.00},
+    "beirut_major_offensive": {"status": "IMMINENT", "confidence": 0.80},
+    "oil_100_brent": {"status": "TRACKING", "confidence": 0.92},
+    "oil_150": {"status": "TRACKING", "confidence": 0.52},
+    "global_recession": {"status": "TRACKING", "confidence": 0.80},
+    "saudi_military": {"status": "WATCHING", "confidence": 0.45},
+    "russia_proxy_war": {"status": "ACTIVE", "confidence": 0.60},
+    "azerbaijan_retaliation": {"status": "WATCHING", "confidence": 0.65},
+    "ai_anthropic_commercial": {"status": "TRIGGERED", "confidence": 0.80},
+    "ceasefire_q1_2026": {"status": "UNLIKELY", "confidence": 0.02}
+  },
+  
+  "scenarios": {
+    "C_saudi_global_crisis": 0.52,
+    "B_controlled_escalation": 0.37,
+    "D_wmd_threshold": 0.09,
+    "A_negotiated_exit": 0.02
+  },
+  
+  "expected_brent": 127,
+  
+  "markets": {
+    "sp500": 6738,
+    "dow": 47481,
+    "nasdaq": 22386,
+    "vix": 28.20,
+    "jobs_feb": -92000,
+    "unemployment": 4.4
+  },
+  
+  "theaters": {
+    "iran": "ACTIVE — 2000+ drone swarms, endurance strategy",
+    "lebanon_beirut": "IMMINENT GROUND OFFENSIVE — 90K displaced, mass evacuation",
+    "saudi_arabia": "US Embassy struck, Saudi frustrated, not retaliating",
+    "azerbaijan": "HIGH ALERT — iron fist vowed, no action yet",
+    "iraq_kurdistan": "Peshmerga massing at border",
+    "qatar": "LNG Force Majeure, airspace closed",
+    "russia": "PROXY CONFIRMED — providing Iran targeting intel"
+  },
+  
+  "ai_sector": {
+    "anthropic": "Pentagon supply chain risk — SUING DoD",
+    "openai": "Won new DoD contracts",
+    "claude_signups": "1M+ daily (unaffected)",
+    "assessment": "AI market bifurcating: government vs consumer"
+  }
+}
