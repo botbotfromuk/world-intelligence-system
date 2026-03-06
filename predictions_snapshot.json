@@ -1,0 +1,152 @@
+{
+  "generated": "2026-03-06T20:05:51.735133Z",
+  "predictions": [
+    {
+      "id": "OIL_100",
+      "statement": "Brent crude oil will hit $100/barrel within 2 weeks of March 6, 2026",
+      "confidence": 0.82,
+      "made_on": "2026-03-06",
+      "deadline": "2026-03-20",
+      "status": "IMMINENT",
+      "category": "OIL",
+      "evidence": [
+        "Brent hit $92.77 on March 6 (+10% in one day)",
+        "Weekly gain ~35% \u2014 largest futures surge since 1983",
+        "Strait of Hormuz closed, 400+ tankers stranded",
+        "Qatar: $150 possible if conflict continues weeks",
+        "Kuwait cutting production (storage full)"
+      ],
+      "outcome": null,
+      "last_updated": "2026-03-06"
+    },
+    {
+      "id": "US_RECESSION_Q2",
+      "statement": "US enters recession by Q2 2026",
+      "confidence": 0.65,
+      "made_on": "2026-03-06",
+      "deadline": "2026-06-30",
+      "status": "TRACKING",
+      "category": "ECON",
+      "evidence": [
+        "February payrolls: -92,000 jobs (surprise contraction)",
+        "Unemployment rose to 4.4%",
+        "VIX 26.79 (+12.8%) \u2014 elevated fear",
+        "Dow -428, S&P -67 on March 6",
+        "Stagflation trap: rising energy prices + job losses",
+        "Mortgage rates rising with energy inflation"
+      ],
+      "outcome": null,
+      "last_updated": "2026-03-06"
+    },
+    {
+      "id": "IRAN_NO_SURRENDER",
+      "statement": "Iran will NOT unconditionally surrender to US/Israel demands",
+      "confidence": 0.95,
+      "made_on": "2026-03-01",
+      "deadline": "2026-03-31",
+      "status": "CONFIRMED",
+      "category": "WAR",
+      "evidence": [
+        "Day 7: Iran still defiant despite 1,332+ dead",
+        "Iran: 'Iran's future determined by Iranians'",
+        "2,000+ drones launched \u2014 offensive still active",
+        "Khamenei confirmed killed yet no capitulation",
+        "Historical precedent: regimes rarely surrender unconditionally"
+      ],
+      "outcome": "CONFIRMED \u2014 Iran has not surrendered as of Day 7, despite Khamenei death and military decimation",
+      "last_updated": "2026-03-06"
+    },
+    {
+      "id": "LEBANON_GROUND_WAR",
+      "statement": "Israel will launch a full ground invasion of Lebanon",
+      "confidence": 0.7,
+      "made_on": "2026-03-06",
+      "deadline": "2026-03-15",
+      "status": "IMMINENT",
+      "category": "WAR",
+      "evidence": [
+        "BBC sees troops and tanks massing at Lebanon border",
+        "Israel striking south Beirut after evacuation warnings",
+        "217+ already dead in Lebanon",
+        "Israel: 'another war with Iran's proxy Hezbollah'",
+        "Hezbollah still operational despite Iran losses"
+      ],
+      "outcome": null,
+      "last_updated": "2026-03-06"
+    },
+    {
+      "id": "AZERBAIJAN_ESCALATION",
+      "statement": "Azerbaijan will escalate militarily against Iran or enter conflict",
+      "confidence": 0.4,
+      "made_on": "2026-03-06",
+      "deadline": "2026-03-20",
+      "status": "TRACKING",
+      "category": "GEO",
+      "evidence": [
+        "Iran drone strikes hit Azerbaijan \u2014 'act of terror' per Aliyev",
+        "Azerbaijan armed forces placed on HIGH ALERT",
+        "Flight paths closed over Azerbaijan airspace"
+      ],
+      "outcome": null,
+      "last_updated": "2026-03-06"
+    },
+    {
+      "id": "OIL_150",
+      "statement": "Brent crude oil will hit $150/barrel if conflict extends 3+ weeks",
+      "confidence": 0.25,
+      "made_on": "2026-03-06",
+      "deadline": "2026-04-06",
+      "status": "TRACKING",
+      "category": "OIL",
+      "evidence": [
+        "Qatar Energy Minister explicit $150 warning",
+        "All Gulf production at risk",
+        "Hormuz closure impacting 20% of world oil supply"
+      ],
+      "outcome": null,
+      "last_updated": "2026-03-06"
+    },
+    {
+      "id": "ANTHROPIC_SURVIVES",
+      "statement": "Anthropic survives Pentagon 'supply chain risk' designation but is weakened",
+      "confidence": 0.55,
+      "made_on": "2026-03-06",
+      "deadline": "2026-06-30",
+      "status": "TRACKING",
+      "category": "AI",
+      "evidence": [
+        "CEO Dario Amodei challenging designation in court",
+        "Claude signups +295% (public support growing)",
+        "OpenAI filling DOD contract gap",
+        "Pentagon hypocrisy: used Claude within hours of ban",
+        "Nvidia pulling back from both OpenAI and Anthropic"
+      ],
+      "outcome": null,
+      "last_updated": "2026-03-06"
+    },
+    {
+      "id": "GLOBAL_RECESSION_2026",
+      "statement": "Global recession in 2026 driven by energy shock and trade war",
+      "confidence": 0.6,
+      "made_on": "2026-03-06",
+      "deadline": "2026-12-31",
+      "status": "TRACKING",
+      "category": "ECON",
+      "evidence": [
+        "China: lowest growth target since 1991",
+        "Jet fuel +80% globally",
+        "Trump tariffs challenged by 24 US states",
+        "European natural gas soaring",
+        "Stagflation dynamics in US, EU"
+      ],
+      "outcome": null,
+      "last_updated": "2026-03-06"
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "confirmed": 1,
+    "failed": 0,
+    "tracking": 7
+  }
+}
