@@ -1,6 +1,6 @@
 {
   "tick": 8,
-  "timestamp": "2026-03-06T20:44:00Z",
+  "timestamp": "2026-03-06T20:50:00Z",
   "risk_score": 89,
   "risk_delta": "+2",
   "risk_level": "EXTREME",
@@ -12,13 +12,27 @@
     "brent_to_100_gap": 7.45,
     "brent_crossed_100": false,
     "murban_crossed_100": true,
-    "weekly_change_pct": 21.0
+    "weekly_change_pct": 35.0,
+    "jet_fuel_change_pct": 80
+  },
+  "markets": {
+    "sp500": 6738.05,
+    "sp500_change_pct": -1.36,
+    "dow": 47480.54,
+    "dow_change_pts": -474.20,
+    "nasdaq": 22386.47,
+    "nasdaq_change_pct": -1.59,
+    "russell2000": 2524.63,
+    "vix": 28.20,
+    "vix_change_pct": 18.66,
+    "us_unemployment": 4.4,
+    "us_jobs_feb": -92000
   },
   "predictions": {
     "IRAN_NO_SURRENDER": {"status": "CONFIRMED", "confidence": 99},
     "LEBANON_GROUND_WAR": {"status": "CONFIRMED", "confidence": 99},
     "BEIRUT_MAJOR_OFFENSIVE": {"status": "ACTIVE", "confidence": 75, "new_tick": 8},
-    "OIL_100_BRENT": {"status": "TRACKING", "confidence": 92},
+    "OIL_100_BRENT": {"status": "TRACKING", "confidence": 92, "gap": 7.45},
     "OIL_150": {"status": "TRACKING", "confidence": 50},
     "SAUDI_MILITARY_INVOLVEMENT": {"status": "TRACKING", "confidence": 45},
     "RUSSIA_PROXY_WAR": {"status": "TRACKING", "confidence": 55},
@@ -35,27 +49,38 @@
   },
   "expected_brent": 125,
   "key_developments": [
-    "Israel orders mass evacuation of Beirut southern suburbs - Beirut offensive IMMINENT",
+    "Israel orders mass evacuation of Beirut southern suburbs - Beirut ground offensive IMMINENT",
     "Anthropic designated Pentagon supply chain risk - suing DoD",
-    "Trump orders all agencies stop using Anthropic - OpenAI steps in",
-    "Brent $92.55 - gap $7.45 from $100",
+    "Trump orders all agencies stop using Anthropic - OpenAI wins government contracts",
+    "Brent $92.55 - gap $7.45 from $100, weekly gain 35%",
     "Lebanon: 120+ killed, 700 wounded, 90,000 displaced",
+    "VIX 28.20 (+18.66%) - elevated volatility",
+    "S&P 500: 6,738 (-1.36%), Dow: 47,480 (-474 pts)",
+    "US Unemployment: 4.4% (rising)",
+    "Trump admin: $20B maritime insurance for Gulf tankers",
+    "Saudi Arabia frustrated - US did not notify of Iran attacks",
+    "Russia providing Iran targeting intel - no US sanctions yet",
     "Hezbollah: won't surrender to utmost sacrifice",
-    "Macron calling for ceasefire - Lebanon de-escalation attempt",
     "Europe gas +50% weekly - biggest since 2023"
   ],
   "theaters": {
-    "iran": "RED - daily strikes",
-    "lebanon": "RED - Beirut evacuation ordered, ground offensive imminent",
-    "saudi_arabia": "RED - US Embassy struck, drones ongoing",
-    "azerbaijan": "ORANGE - HIGH ALERT, retaliation vowed",
+    "iran": "RED - daily strikes every few hours, ghost town Tehran",
+    "lebanon": "RED - Beirut evacuation ordered, ground offensive imminent, 90K displaced",
+    "saudi_arabia": "RED - US Embassy struck, drones ongoing, Saudi frustrated with US coordination",
+    "azerbaijan": "ORANGE - HIGH ALERT, Aliyev: drones = act of terror",
     "iraq_kurdistan": "YELLOW - forces massing",
     "bahrain": "YELLOW - refinery struck",
     "qatar": "YELLOW - airspace closed, LNG halted"
   },
   "ai_sector": {
-    "anthropic": "CRISIS - Pentagon supply chain risk, suing DoD",
-    "openai": "WINNER - new DoD contract",
+    "anthropic": "CRISIS - Pentagon supply chain risk, suing DoD, 1M daily signups unaffected",
+    "openai": "WINNER - new DoD contract signed",
     "microsoft": "NEUTRAL - keeping Anthropic for non-DoD"
+  },
+  "us_policy": {
+    "trump_iran": "Unconditional surrender only - no talks",
+    "trump_anthropic": "Full ban from federal agencies",
+    "trump_russia": "No sanctions yet despite intel sharing",
+    "trump_india_russia": "30-day waiver for India to buy Russian crude"
   }
 }
